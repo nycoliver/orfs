@@ -1,0 +1,5 @@
+Mesh-*
+node_modules
+.DS_Store
+files
+files.json
