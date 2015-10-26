@@ -1,5 +1,11 @@
 {
-  "name"    : "mesh",
-  "version" : "0.1.0",
-  "main"    : "main.js"
+  "name": "mesh",
+  "version": "0.1.0",
+  "main": "main.js",
+  "dependencies": {
+    "alac": "^0.1.0",
+    "av": "^0.4.4",
+    "id3js": "^1.1.3",
+    "ipfs-api": "^2.4.1"
+  }
 }
