@@ -3,6 +3,75 @@ var ipfs = ipfs_api('localhost', '5001');
 var fs = require('fs');
 var id3 = require('id3js');
 var alac = require('alac');
+var restify = require('restify');
+var request = require('request');
+
+var cjdnsAdmin = require('cjdns-admin'),
+    admin,
+    channel;
+
+// create a new Admin
+admin = cjdnsAdmin.createAdmin({
+    ip: '127.0.0.1',
+    port: 11234,
+    password: '5q6w0vttn8lsc0lw8dulfd19y1qxwz9'
+});
+
+
+var knownPeers = {};
+
+function getPostsFromPeer(peerIp) {
+  request("http://["+peerIp+"]:5002/posts", function(err, res, body) {
+    if (err)
+      console.log(err)
+    else {
+      console.log(body);
+    }
+  })
+}
+
+
+
+// create a response handler
+function peersResponse (res) {
+    // process ping response
+
+
+    console.dir(JSON.stringify(res.data.routingTable, null, 4));
+
+    for (var i=0; i<res.data.routingTable.length; i++) {
+      var peer = res.data.routingTable[i];
+      knownPeers[peer.ip] = peer;
+      knownPeers[peer.ip].lastSeen = new Date();
+
+      getPostsFromPeer(peer.ip);
+    }
+
+    console.log(JSON.stringify(knownPeers, null, 4));
+
+    if (res.data && res.data.more)
+      dumpPeers(res.args.page+1)
+}
+
+function dumpPeers(page) {
+  // ping the admin
+  channel = admin.nodeStore.dumpTable({
+      page: page
+  });
+
+  // handle the response
+  admin.on(channel, peersResponse);
+}
+
+dumpPeers(0)
+setInterval(function(){dumpPeers(0)}, 60*1000)
+
+
+
+
+
+
+
 
 window.$ = window.jQuery = require('./js/jquery-2.1.4.min.js');
 
@@ -18,6 +87,17 @@ else {
     "files" : []
   }
 }
+
+/** PUBLIC API **/
+var server = restify.createServer();
+server.get('/posts', sendFileList);
+
+function sendFileList(req, res, next) {
+  res.send(userInfo);
+}
+
+server.listen(5002);
+
 
 
 var App = React.createClass({
