@@ -6,7 +6,18 @@ var alac = require('alac');
 
 window.$ = window.jQuery = require('./js/jquery-2.1.4.min.js');
 
-var userInfo = require('./files.json');
+var userInfo;
+var exists = fs.existsSync('./files.json');
+if (exists) {
+  userInfo = require('./files.json');
+}
+else {
+  userInfo = {
+    "avatar" : "QmVr51H66mr7htq691ur7m4gFmpEdRbqLNoxv5omrBPiLD",
+    "key" : "",
+    "files" : []
+  }
+}
 
 
 var App = React.createClass({
