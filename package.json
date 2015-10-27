@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "main.js",
   "dependencies": {
+    "JSONStream": "^1.0.6",
     "alac": "^0.1.0",
     "av": "^0.4.4",
     "cjdns-admin": "^0.2.0",
