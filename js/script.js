@@ -10,12 +10,11 @@ var cjdnsAdmin = require('cjdns-admin'),
     admin,
     channel;
 
+
+var config = require('./config.json')
+
 // create a new Admin
-admin = cjdnsAdmin.createAdmin({
-    ip: '127.0.0.1',
-    port: 11234,
-    password: '5q6w0vttn8lsc0lw8dulfd19y1qxwz9'
-});
+admin = cjdnsAdmin.createAdmin(config.cjdnsAdmin);
 
 
 var knownPeers = {};
