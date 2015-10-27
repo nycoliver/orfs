@@ -11,16 +11,19 @@ var cjdnsAdmin = require('cjdns-admin'),
     channel;
 
 
-var config = require('./config.json')
+var config = require('./config.json');
 
 // create a new Admin
 admin = cjdnsAdmin.createAdmin(config.cjdnsAdmin);
 
 
+
+
+
 var knownPeers = {};
 
-function getPostsFromPeer(peerIp) {
-  request("http://["+peerIp+"]:5002/posts", function(err, res, body) {
+function getInfoOfPeer(peerIp) {
+  request("http://["+peerIp+"]:5002/profile", function(err, res, body) {
     if (err)
       console.log(err)
     else {
@@ -43,7 +46,7 @@ function peersResponse (res) {
       knownPeers[peer.ip] = peer;
       knownPeers[peer.ip].lastSeen = new Date();
 
-      getPostsFromPeer(peer.ip);
+      getInfoOfPeer(peer.ip);
     }
 
     console.log(JSON.stringify(knownPeers, null, 4));
@@ -74,25 +77,21 @@ setInterval(function(){dumpPeers(0)}, 60*1000)
 
 window.$ = window.jQuery = require('./js/jquery-2.1.4.min.js');
 
-var userInfo;
+
+var files;
 var exists = fs.existsSync('./files.json');
 if (exists) {
-  userInfo = require('./files.json');
+  files = require('./files.json');
 }
-else {
-  userInfo = {
-    "avatar" : "QmVr51H66mr7htq691ur7m4gFmpEdRbqLNoxv5omrBPiLD",
-    "key" : "",
-    "files" : []
-  }
-}
+
+var profile = config.profile;
 
 /** PUBLIC API **/
 var server = restify.createServer();
-server.get('/posts', sendFileList);
+server.get('/profile', sendProfile);
 
-function sendFileList(req, res, next) {
-  res.send(userInfo);
+function sendProfile(req, res, next) {
+  res.send(profile);
 }
 
 server.listen(5002);
@@ -122,7 +121,7 @@ var Stream = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({files: userInfo.files});
+    this.setState({files: files.files});
   },
 
   drop: function(files) {
@@ -170,7 +169,7 @@ var Stream = React.createClass({
           files: nextFiles
         })
 
-        fs.writeFile('files.json', JSON.stringify(userInfo))
+        fs.writeFile('files.json', JSON.stringify(files))
       })
     }
 
@@ -188,7 +187,7 @@ var Stream = React.createClass({
     var files = this.state.files.map(function(file, index) {
       if (file.type == "image/jpeg") {
         return React.createElement(PhotoPost, {
-          author: 'oliver54321',
+          author: file.author,
           id: file.id,
           title: file.title,
           caption: file.caption,
@@ -196,7 +195,7 @@ var Stream = React.createClass({
       }
       else if (file.type == "audio/x-m4a" || file.type == "audio/mp3") {
         return React.createElement(AudioPost, {
-          author: 'oliver54321',
+          author: file.author,
           id: file.id,
           artwork: file.artwork,
           title: file.title,
@@ -205,7 +204,7 @@ var Stream = React.createClass({
       }
       else if (file.type == "video/mp4" || "video/webm") {
         return React.createElement(VideoPost, {
-          author: 'oliver54321',
+          author: file.author,
           id: file.id,
           title: file.title,
           caption: file.caption,
@@ -234,7 +233,7 @@ var NewPost = React.createClass({
 
     return(
     React.createElement("div", {className: "post"},
-      React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + userInfo.avatar}),
+      React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + profile.avatar}),
       React.createElement(Dropzone, {onDrop: this.props.onDrop, style: style}, null)
     )
   )
@@ -248,7 +247,7 @@ var PhotoPost = React.createClass({displayName: "PhotoPost",
     return (
 
       React.createElement("div", {className: "post"},
-        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + userInfo.avatar}),
+        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + profile.avatar}),
         React.createElement("div", {className: "content"},
           React.createElement("div", {className: "header"},
             React.createElement("span", null, this.props.author)
@@ -270,7 +269,7 @@ var VideoPost = React.createClass({displayName: "VideoPost",
     return (
 
       React.createElement("div", {className: "post"},
-        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + userInfo.avatar}),
+        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + profile.avatar}),
         React.createElement("div", {className: "content"},
           React.createElement("div", {className: "header"},
             React.createElement("span", null, this.props.author)
@@ -292,7 +291,7 @@ var AudioPost = React.createClass({displayName: "AudioPost",
     return (
 
       React.createElement("div", {className: "post"},
-        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + userInfo.avatar}),
+        React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + profile.avatar}),
         React.createElement("div", {className: "content"},
           React.createElement("div", {className: "header"},
             React.createElement("span", null, this.props.author)
@@ -319,8 +318,8 @@ var GraphMenu = React.createClass({
       React.createElement("div", {id: "GraphMenu"},
         React.createElement("div", {className: "btn-group", role: "group", ariaLabel: "..."},
           React.createElement("button", {className: "btn btn-default dropdown-toggle"},
-            React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + userInfo.avatar}),
-            "oliver54321"),
+            React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + profile.avatar}),
+            profile.username),
           React.createElement("button", {className: "btn btn-default pull-right"}, "+")
         )
       )
