@@ -1,7 +1,9 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
+var Constants = require('../constants/Constants');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
+var ActionTypes = Constants.ActionTypes;
 
 var _posts = [ { "artwork" : "QmfCSdrAvg7ng1ETAqvYNGkhnGUNE89V2W2WSMoxVa6qAK",
       "author" : "ikeafurniture",
@@ -42,6 +44,12 @@ var _posts = [ { "artwork" : "QmfCSdrAvg7ng1ETAqvYNGkhnGUNE89V2W2WSMoxVa6qAK",
     }
   ];
 
+function _processFoundPosts(posts) {
+  // See which posts are new
+  // Insert into posts
+  // Emit new posts event with new posts
+}
+
 var PostStore = assign({}, EventEmitter.prototype, {
 
   init: function() {
@@ -56,6 +64,14 @@ var PostStore = assign({}, EventEmitter.prototype, {
     return _posts[id];
   }
 
+})
+
+PostStore.dispatchToken = AppDispatcher.register(function(action) {
+  switch(action.type) {
+    case ActionTypes.FOUND_POST:
+      AppDispatcher.waitFor([PostStore.dispatchToken]);
+
+  }
 })
 
 module.exports = PostStore;
