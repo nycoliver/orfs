@@ -9,6 +9,9 @@ var request = require('request');
 var JSONStream = require('JSONStream');
 var es = require('event-stream');
 
+var PostActionCreators = require('actions/PostActionCreators');
+
+
 var config = require('../config.json');
 
 var knownPeers = {};
@@ -17,7 +20,7 @@ function insertPosts(posts) {
   console.log("adding posts");
   for (var i = 0; i < posts.length; i++) {
     console.log(posts[i]);
-    files.push(posts[i]);
+    PostActionCreators.foundPost(posts[i]);
   }
   // Stream.setState({files: files.files});
 }
