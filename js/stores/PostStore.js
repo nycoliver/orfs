@@ -11,12 +11,6 @@ var _posts = [ { "artwork" : "QmfCSdrAvg7ng1ETAqvYNGkhnGUNE89V2W2WSMoxVa6qAK",
       "type" : "audio/mp3"
     },
     { "author" : "ikeafurniture",
-      "id" : "QmfGsRrBJqwbRDwmmzA58sVyJuXAu7nsnibWyPmsQRGges",
-      "name" : "000wGOwWjx06UAlFMAzd01040100tS4x0k01.mp4",
-      "size" : 7119369,
-      "type" : "video/mp4"
-    },
-    { "author" : "ikeafurniture",
       "id" : "QmSpThVxDomSEGgCNUX4XaXUdawix4YvgBtB3KBYjynDEX",
       "name" : "11jteu0.jpg",
       "size" : 103425,
