@@ -9,18 +9,15 @@ var request = require('request');
 var JSONStream = require('JSONStream');
 var es = require('event-stream');
 
-
-var config = require('./config.json');
-
+var config = require('../config.json');
 
 var knownPeers = {};
-
 
 function insertPosts(posts) {
   console.log("adding posts");
   for (var i = 0; i < posts.length; i++) {
     console.log(posts[i]);
-    files.files.push(posts[i]);
+    files.push(posts[i]);
   }
   // Stream.setState({files: files.files});
 }
@@ -48,6 +45,7 @@ function getPosts(id) {
 
               if(res.readable) {
 
+
                   // Returned as a stream
                   res.pipe(process.stdout)
                   res.pipe(JSONStream.parse('files'))
@@ -65,7 +63,7 @@ function getPosts(id) {
   })
 }
 
-getPosts("QmXE8vq2LsEmdHHtb95ujTv2Hfag4qTjk2fehwC8HVXcMn");
+// getPosts("QmXE8vq2LsEmdHHtb95ujTv2Hfag4qTjk2fehwC8HVXcMn");
 
 // create a new Admin
 var admin = cjdnsAdmin.createAdmin(config.cjdnsAdmin);
@@ -73,11 +71,13 @@ var admin = cjdnsAdmin.createAdmin(config.cjdnsAdmin);
 
 function getInfoOfPeer(peerIp) {
   request("http://["+peerIp+"]:5002/profile", function(err, res, body) {
-    // if (err)
-    //   // console.log(err)
-    // else {
-    //   // console.log(body);
-    // }
+    if (err)
+      console.log(err)
+    else {
+      knownPeers[peerIp].orfs = JSON.parse(body)
+      getPosts(knownPeers[peerIp].orfs.id)
+      console.log(knownPeers[peerIp], files)
+    }
   })
 }
 
@@ -86,7 +86,6 @@ function getInfoOfPeer(peerIp) {
 // create a response handler
 function peersResponse (res) {
     // process ping response
-
 
     // console.dir(JSON.stringify(res.data.routingTable, null, 4));
 
@@ -98,7 +97,7 @@ function peersResponse (res) {
       getInfoOfPeer(peer.ip);
     }
 
-    // console.log(JSON.stringify(knownPeers, null, 4));
+    //console.log(JSON.stringify(knownPeers, null, 4));
 
     if (res.data && res.data.more)
       dumpPeers(res.args.page+1)
@@ -116,9 +115,6 @@ function dumpPeers(page) {
 
 dumpPeers(0)
 setInterval(function(){dumpPeers(0)}, 60*1000)
-
-
-
 
 var files;
 var exists = fs.existsSync('./orfs.json');
