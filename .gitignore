@@ -4,3 +4,5 @@ node_modules
 files
 files.json
 config.json
+js/bundle.js
+orfs.json
