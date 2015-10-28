@@ -62,9 +62,9 @@ body {
 }
 
 .stream{
-	position: absolute;
-	left: 25%;
-	width: 75%;
+	/*position: absolute;*/
+	/*left: 25%;*/
+	width: 100%;
 	background-color: #121212;
 }
 
@@ -80,6 +80,7 @@ body {
 	margin-top: -2px;
 	font-size: 1.5em;
 	color: #bfbfbf;
+	width: 20px;
 	/*background-color: red;*/
 }
 
