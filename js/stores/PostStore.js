@@ -3,7 +3,10 @@ var Constants = require('../constants/Constants');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
+var UploadUtils = require('../utils/UploadUtils');
+
 var ActionTypes = Constants.ActionTypes;
+var CHANGE_EVENT = 'change';
 
 var _posts = [ { "artwork" : "QmfCSdrAvg7ng1ETAqvYNGkhnGUNE89V2W2WSMoxVa6qAK",
       "author" : "ikeafurniture",
@@ -50,7 +53,24 @@ function _processFoundPosts(posts) {
   // Emit new posts event with new posts
 }
 
+function _createPost(post) {
+  console.log("adding file: ", post)
+  UploadUtils.add(post.path, function(err, res) {
+    console.log("!!!!!!!!!!!!");
+  })
+  // ipfs.add(post.path, function(err, res) {
+  //   console.log('???')
+  //   console.log(err);
+  //   console.log(res)
+  // })
+      // _posts[post.id] = post;
+}
+
 var PostStore = assign({}, EventEmitter.prototype, {
+
+  emitChange: function() {
+    this.emit(CHANGE_EVENT);
+  },
 
   init: function() {
 
@@ -68,9 +88,16 @@ var PostStore = assign({}, EventEmitter.prototype, {
 
 PostStore.dispatchToken = AppDispatcher.register(function(action) {
   switch(action.type) {
+    case ActionTypes.CREATE_POST:
+      var post = action.post
+      _createPost(post)
+      PostStore.emitChange();
+      break;
     case ActionTypes.FOUND_POST:
-      AppDispatcher.waitFor([PostStore.dispatchToken]);
+      break;
 
+    default:
+      // Do nothing.
   }
 })
 

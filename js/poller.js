@@ -9,7 +9,7 @@ var request = require('request');
 var JSONStream = require('JSONStream');
 var es = require('event-stream');
 
-var PostActionCreators = require('actions/PostActionCreators');
+var PostActionCreators = require('./actions/PostActionCreators');
 
 
 var config = require('../config.json');
@@ -41,7 +41,7 @@ function getPosts(id) {
       console.log("LSd!" + JSON.stringify(res));
       res.Objects.forEach(function(node) {
         node.Links.forEach(function(link) {
-          if (link.Name == "files.json")
+          if (link.Name == "orfs.json")
             console.log("Found files: " + JSON.stringify(link, null, 4));
           ipfs.cat(link.Hash, function(err, res) {
               if(err || !res) return console.error(err)
@@ -120,9 +120,9 @@ dumpPeers(0)
 setInterval(function(){dumpPeers(0)}, 60*1000)
 
 var files;
-var exists = fs.existsSync('./orfs.json');
+var exists = fs.existsSync('../orfs.json');
 if (exists) {
-  files = require('./orfs.json');
+  files = require('../orfs.json');
 }
 
 var profile = config.profile;
