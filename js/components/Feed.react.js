@@ -34,7 +34,7 @@ var Feed = React.createClass({
 
   render: function() {
     var files = this.state.posts.map(function(file, index) {
-      if (file.type == "image/jpeg") {
+      if (file.type == "image/jpeg" || "image/png") {
         return React.createElement(PhotoPost, {
           author: file.author,
           id: file.id,

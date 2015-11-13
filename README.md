@@ -6,4 +6,4 @@ A Social Network Built on CJDNS and IPFS
 
     npm install
     cp config.json.example config.json
-    electron .
+    node build.js && electron .
