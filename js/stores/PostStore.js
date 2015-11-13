@@ -53,23 +53,35 @@ function _processFoundPosts(posts) {
   // Emit new posts event with new posts
 }
 
-function _createPost(post) {
-  console.log("adding file: ", post)
+function _createPost(post, cb) {
   UploadUtils.add(post.path, function(err, res) {
     console.log("!!!!!!!!!!!!");
+    console.log(post);
+    console.log(err, res);
+    post = {
+      "author": "ikeafurniture", // WARNING get rid of hardcode
+      "id": res[0].Hash, // WARNING What if it's not [0]
+      "name": post.name, // Or should it be res.name??
+      "type": post.type,
+      "size": post.size
+    }
+    _posts.unshift(post);
+    cb()
   })
-  // ipfs.add(post.path, function(err, res) {
-  //   console.log('???')
-  //   console.log(err);
-  //   console.log(res)
-  // })
-      // _posts[post.id] = post;
 }
 
 var PostStore = assign({}, EventEmitter.prototype, {
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
+  },
+
+  addChangeListener: function(callback) {
+    this.on(CHANGE_EVENT, callback);
+  },
+
+  removeChangeListener: function(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
   },
 
   init: function() {
@@ -90,8 +102,9 @@ PostStore.dispatchToken = AppDispatcher.register(function(action) {
   switch(action.type) {
     case ActionTypes.CREATE_POST:
       var post = action.post
-      _createPost(post)
-      PostStore.emitChange();
+      _createPost(post, function() {
+          PostStore.emitChange();
+      })
       break;
     case ActionTypes.FOUND_POST:
       break;

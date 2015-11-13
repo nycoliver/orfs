@@ -7,6 +7,7 @@
     "JSONStream": "^1.0.6",
     "alac": "^0.1.0",
     "av": "^0.4.4",
+    "browserify": "^6.3.4",
     "cjdns-admin": "^0.2.0",
     "event-stream": "^3.3.2",
     "flux": "^2.1.1",
@@ -27,7 +28,7 @@
     "watchify": "^2.1.1"
   },
   "scripts": {
-    "start": "watchify -o js/bundle.js -v -d js/app.js",
+    "start": "watchify --no-builtins --ig --igv _process -o js/bundle.js -v -d js/app.js",
     "build": "browserify . -t [envify --NODE_ENV production] | uglifyjs -cm > js/bundle.min.js",
     "test": "jest"
   },

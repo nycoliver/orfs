@@ -24,7 +24,7 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    // this.setState({files: files.files});
+    PostStore.addChangeListener(this._onChange);
   },
 
   drop: function(files) {
@@ -68,6 +68,11 @@ var Feed = React.createClass({
       )
     );
 
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores(this.props.threadID));
+    console.log(this.state.posts)
   }
 })
 
