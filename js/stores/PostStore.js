@@ -55,18 +55,40 @@ function _processFoundPosts(posts) {
 
 function _createPost(post, cb) {
   UploadUtils.add(post.path, function(err, res) {
-    console.log("!!!!!!!!!!!!");
-    console.log(post);
-    console.log(err, res);
-    post = {
+
+    console.log(res)
+
+    var postToAdd = {
       "author": "ikeafurniture", // WARNING get rid of hardcode
-      "id": res[0].Hash, // WARNING What if it's not [0]
+      "id": res[0].Hash, // WARNING What if it's not [0] -- get length from res.length
       "name": post.name, // Or should it be res.name??
       "type": post.type,
       "size": post.size
     }
-    _posts.unshift(post);
-    cb()
+
+    // Just make this UploadUtils.uploadAudio or something
+    if (post.type == "audio/mp3" || post.type == "audio/x-m4a") {
+      UploadUtils.getArtwork(post, function(err, artwork) {
+        UploadUtils.add(artwork, function(err, artres) {
+          postToAdd.artwork = artres[0].Hash;
+          // factor this out to another function newPost or something
+          // on events found/new_post
+          _posts.unshift(postToAdd);
+          UploadUtils.publish(_posts, function(err, res) {
+            console.log("publish: ", err, res);
+          })
+          cb()
+        })
+      });
+    }
+
+    else {
+      // factor this out to another function newPost or something
+      // on events found/new_post
+      _posts.unshift(postToAdd);
+      cb()
+    }
+
   })
 }
 
