@@ -34,7 +34,7 @@ var Feed = React.createClass({
 
   render: function() {
     var files = this.state.posts.map(function(file, index) {
-      if (file.type == "image/jpeg" || "image/png") {
+      if (file.type == "image/jpeg" || file.type == "image/png") {
         return React.createElement(PhotoPost, {
           author: file.author,
           id: file.id,
@@ -51,7 +51,7 @@ var Feed = React.createClass({
           caption: file.caption,
           key: index}); // Size, icon, what else?
       }
-      else if (file.type == "video/mp4" || "video/webm") {
+      else if (file.type == "video/mp4" || "video/webm" || "video/") {
         return React.createElement(VideoPost, {
           author: file.author,
           id: file.id,
@@ -72,7 +72,6 @@ var Feed = React.createClass({
 
   _onChange: function() {
     this.setState(getStateFromStores(this.props.threadID));
-    console.log(this.state.posts)
   }
 })
 
