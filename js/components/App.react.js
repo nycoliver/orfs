@@ -1,5 +1,6 @@
 var React = require('react');
 var Feed = require('./Feed.react');
+var TopBar = require('./TopBar.react');
 
 var App = React.createClass({
   displayName: 'App',
@@ -7,6 +8,7 @@ var App = React.createClass({
   render: function render() {
     return (
       <div className="app">
+      	<TopBar />
         <Feed />
       </div>
     );

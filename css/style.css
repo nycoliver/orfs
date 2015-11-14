@@ -2,6 +2,37 @@ body {
 	background-color: #121212;
 }
 
+.top-bar {
+	height: 50px;
+	width: 100%;
+	background-color: #222;
+	border-bottom: 1px solid #333;
+}
+
+.search {
+	text-align: center;
+}
+
+.search * {
+	display: inline-block;
+}
+
+.search .form-control {
+	width: 500px;
+	background-color: #353535;
+	border-color: #353535;
+	color: #999;
+}
+
+.search input {
+	outline: none;
+	box-shadow:none !important;
+}
+
+
+
+
+
 #logo {
 	height: 29px;
 	position: fixed;
@@ -96,24 +127,17 @@ body {
 }
 
 .post {
-	width: 560px;
+	width: 620px;
 	display: block;
-  margin: 30px auto;
+  	margin: 30px auto;
+  	padding-right: 60px;
 }
 
 .post .content {
 	margin-left: 60px;
 }
 
-.post .content img {
-	width: 500px;
-}
-
-.post .content video {
-	width: 500px;
-}
-
-.post .content audio {
+.post .content * {
 	width: 500px;
 }
 
