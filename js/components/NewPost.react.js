@@ -22,9 +22,7 @@ var NewPost = React.createClass({
       height: 100,
       borderStyle: "dashed"
     }
-
-    console.log(JSON.stringify(this.state.profile, null, 4))
-    console.log(this.state.profile.avatar)
+    
     return(
       React.createElement("div", {className: "post"},
         React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + this.state.profile.avatar}),
