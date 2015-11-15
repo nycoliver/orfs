@@ -26,7 +26,7 @@ module.exports = {
   },
 
   publish: function(data, cb) {
-  	ipfs.add(new Buffer('ipfs/'+JSON.stringify(data), "utf8"), function(err, res) {
+  	ipfs.add(new Buffer(JSON.stringify(data), "utf8"), function(err, res) {
   		if (err) throw err;
   		ipfs.name.publish(res[0].Hash, function(err, res) { //no options?
     		cb(err, res)
