@@ -7,6 +7,8 @@ var VideoPost = require('./VideoPost.react');
 var NewPost = require('./NewPost.react');
 
 var PostStore = require('../stores/PostStore');
+var PeerStore = require('../stores/PeerStore'); // is this the right place?
+PeerStore.init(); // Is this right??????
 
 var UploadUtils = require('../utils/UploadUtils')
 
@@ -18,6 +20,10 @@ var getStateFromStores = function() {
 
 var Feed = React.createClass({
   displayName: "Feed",
+
+  init: function() {
+    // PeerStore.checkForUpdates
+  },
 
   getInitialState: function() {
     return getStateFromStores();
@@ -33,7 +39,17 @@ var Feed = React.createClass({
   },
 
   render: function() {
-    var files = this.state.posts.map(function(file, index) {
+    if (this.state.posts.length == 0)
+      return (
+        <div clasName="noposts">
+        <h2>No Posts!</h2>
+        </div>
+      )
+    
+    var posts = this.state.posts;
+
+    var files = Object.keys(posts).map(function(file, index) {
+      file = posts[file];
       if (file.type == "image/jpeg" || file.type == "image/png") {
         return React.createElement(PhotoPost, {
           author: file.author,
@@ -71,7 +87,7 @@ var Feed = React.createClass({
   },
 
   _onChange: function() {
-    this.setState(getStateFromStores(this.props.threadID));
+    this.setState(getStateFromStores());
   }
 })
 

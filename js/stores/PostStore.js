@@ -8,44 +8,9 @@ var UploadUtils = require('../utils/UploadUtils');
 var ActionTypes = Constants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
-var _posts = [ { "artwork" : "QmfCSdrAvg7ng1ETAqvYNGkhnGUNE89V2W2WSMoxVa6qAK",
-      "author" : "ikeafurniture",
-      "id" : "QmbeE7NX1oUShzSfMXxP3WYdnNJHNAPMjD8k8MdFHRC9TF",
-      "name" : "08 Jo.mp3",
-      "size" : 5476406,
-      "type" : "audio/mp3"
-    },
-    { "author" : "ikeafurniture",
-      "id" : "QmSpThVxDomSEGgCNUX4XaXUdawix4YvgBtB3KBYjynDEX",
-      "name" : "11jteu0.jpg",
-      "size" : 103425,
-      "type" : "image/jpeg"
-    },
-    { "author" : "ikeafurniture",
-      "id" : "QmV6RmkZWkRX8utdtyqPHPYk731Th3jCveu4CsCvEw8q7P",
-      "name" : "asdf1.jpg",
-      "size" : 48465,
-      "type" : "image/jpeg"
-    },
-    { "author" : "ikeafurniture",
-      "id" : "QmcwU5VKEtAticCnMFNBEgXFakmMYhjMzv41z13uBNK65N",
-      "name" : "asdf2.jpg",
-      "size" : 6473015,
-      "type" : "image/jpeg"
-    },
-    { "author" : "ikeafurniture",
-      "id" : "QmTTiEYuoWDUeSrTCrvaS8Gk4q5jghcAkSavZtK6MFJUTp",
-      "name" : "asdf3.jpg",
-      "size" : 350989,
-      "type" : "image/jpeg"
-    },
-    { "author" : "ikeafurniture",
-      "id" : "QmUCNPr7MRkY71VJkXbd32Bw2QEJgTocn2VNChDgfxhwSj",
-      "name" : "View_of_Woolworth_Building_fixed_crop.jpg",
-      "size" : 1112466,
-      "type" : "image/jpeg"
-    }
-  ];
+
+// Change this to object so individual posts can be accessed
+var _posts = {};
 
 function _processFoundPosts(posts) {
   // See which posts are new
@@ -55,8 +20,6 @@ function _processFoundPosts(posts) {
 
 function _createPost(post, cb) {
   UploadUtils.add(post.path, function(err, res) {
-
-    console.log(res)
 
     var postToAdd = {
       "author": "ikeafurniture", // WARNING get rid of hardcode
@@ -73,7 +36,7 @@ function _createPost(post, cb) {
           postToAdd.artwork = artres[0].Hash;
           // factor this out to another function newPost or something
           // on events found/new_post
-          _posts.unshift(postToAdd);
+          _posts[postToAdd.id] = postToAdd;
           UploadUtils.publish(_posts, function(err, res) {
             console.log("publish: ", err, res);
           })
@@ -85,11 +48,18 @@ function _createPost(post, cb) {
     else {
       // factor this out to another function newPost or something
       // on events found/new_post
-      _posts.unshift(postToAdd);
+      _posts[postToAdd.id] = postToAdd;
       cb()
     }
 
   })
+}
+
+function _foundPost(post, cb) {
+  if (!PostStore.get(post.id)) {
+    _posts[post.id] = post;
+    cb()
+  }
 }
 
 var PostStore = assign({}, EventEmitter.prototype, {
@@ -129,6 +99,10 @@ PostStore.dispatchToken = AppDispatcher.register(function(action) {
       })
       break;
     case ActionTypes.FOUND_POST:
+      var post = action.post
+      _foundPost(post, function() {
+          PostStore.emitChange();
+      })
       break;
 
     default:
