@@ -12,4 +12,6 @@ A Social Network Built on CJDNS and IPFS
 # To Do
 	[x]IPNS based profiles
 		[]ORFS Peer Discovery -- gotta think about the best way to do this!
+	[]Search -- also a hard problem!!
 	[]LevelDB
+	[]Pin posts
