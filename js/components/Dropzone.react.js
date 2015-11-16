@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM =require('react-dom');
 
 var Dropzone = React.createClass({
   getDefaultProps: function() {
@@ -88,7 +89,7 @@ var Dropzone = React.createClass({
   },
 
   open: function() {
-    var fileInput = React.findDOMNode(this.refs.fileInput);
+    var fileInput = ReactDOM.findDOMNode(this.refs.fileInput);
     fileInput.value = null;
     fileInput.click();
   },
