@@ -39,10 +39,11 @@ var Feed = React.createClass({
   },
 
   render: function() {
-    if (this.state.posts.length == 0)
+    if (Object.keys(this.state.posts).length == 0)
       return (
-        <div clasName="noposts">
-        <h2>No Posts!</h2>
+        <div className="noposts">
+          <h2>No Posts!</h2>
+          <h3>Is IPFS daemon running?</h3>
         </div>
       )
     
