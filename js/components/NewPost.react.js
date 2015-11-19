@@ -24,7 +24,7 @@ var NewPost = React.createClass({
     }
     
     return(
-      React.createElement("div", {className: "post"},
+      React.createElement("div", {className: "post new-post"},
         React.createElement("img", {id: "avatar", src: 'http://localhost:8080/ipfs/' + this.state.profile.avatar}),
         React.createElement(Dropzone, {onDrop: this.props.onDrop, style: style}, null)
       )
