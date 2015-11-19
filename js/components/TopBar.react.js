@@ -1,6 +1,7 @@
 // var PostActionCreators = require('../actions/PostActionCreators');
 
 var React = require('react');
+var SearchBar = require('./SearchBar.react');
 
 var ProfileStore = require('../stores/ProfileStore');
 
@@ -26,14 +27,7 @@ var TopBar = React.createClass({
 
     return (
       <div className="top-bar">
-        <div className="search">
-          <form className="navbar-form" role="search">
-            <div className="form-group">
-              <input type="text" className="form-control" placeholder="Search for people or posts...">
-              </input>
-            </div>
-          </form>
-        </div>
+        <SearchBar />
       </div>
     );
 
