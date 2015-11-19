@@ -41,9 +41,12 @@ var Feed = React.createClass({
   render: function() {
     if (Object.keys(this.state.posts).length == 0)
       return (
-        <div className="noposts">
-          <h2>No Posts!</h2>
-          <h3>Is IPFS daemon running?</h3>
+        <div className="stream">
+          <NewPost onDrop={this.drop} />
+          <div className="noposts">
+            <h2>No Posts!</h2>
+            <h3>Is IPFS daemon running?</h3>
+          </div>
         </div>
       )
     
