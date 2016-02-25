@@ -1,6 +1,6 @@
 # Planetary Link
 
-A Decentralized peer to peer social network. IPFS + cjdns.
+A Decentralized social network built on IPFS.
 
 # Development
 
