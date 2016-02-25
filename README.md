@@ -1,6 +1,6 @@
-# ORFS
+# Planetary Link
 
-A Social Network Built on IPFS
+A Decentralized peer to peer social network. IPFS + cjdns.
 
 # Development
 
@@ -9,7 +9,6 @@ In the future this will use https://github.com/ipfs/js-ipfs to avoid any externa
 
     npm install
     npm start
-
 
 # To Do
 	[x]IPNS based profiles
