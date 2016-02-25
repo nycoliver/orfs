@@ -3,13 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>ORFS</title>
+    <script src="static/js/jquery-2.2.0.js"></script>
+    <script src="static/js/bootstrap.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/style.css" />
   </head>
   <body>
     <div id="react">
     </div>
-	<script src="js/bundle.js"></script>
+    <script type="application/javascript" src="static/js/bundle.js"></script>
+  <script>
+    document.addEventListener('dragover',function(event){
+      event.preventDefault();
+      return false;
+    },false);
+
+    document.addEventListener('drop',function(event){
+      event.preventDefault();
+      return false;
+    },false);
+  </script>
   </body>
 </html>

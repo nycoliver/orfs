@@ -1,8 +1,4 @@
-Mesh-*
 node_modules
 .DS_Store
-files
-files.json
-config.json
 js/bundle.js
-orfs.json
+npm-debug.log
