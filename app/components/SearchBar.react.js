@@ -55,16 +55,25 @@ var SearchBar = React.createClass({
 			}
 	},
 
+	close: function() {
+		this.setState({
+			options: {},
+      open: false,
+      activeIndex: -1,
+			text: ''
+		})
+	},
+
 	render: function() {
 		return (
 			<div className="dropdown search">
 	      <form className="form-inline" role="search">
 	        <div className="form-group">
-	          <input type="text" className="form-control" onChange={this.textChanged} placeholder="Search or enter peer id">
+	          <input type="text" className="form-control" value={this.state.text} onChange={this.textChanged} placeholder="Search or enter peer id">
 	          </input>
 	        </div>
 
-	        <Dropdown open={this.state.open} options={this.state.options}/>
+	        <Dropdown open={this.state.open} close={this.close} options={this.state.options}/>
 	      </form>
 	    </div>
 		)

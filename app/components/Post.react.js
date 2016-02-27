@@ -36,7 +36,7 @@ var AudioPost = React.createClass({displayName: "Post",
       <div className="post">
         <div className={'author'}>
           <Avatar image={this.props.avatar} />
-          <Link to={"user/"+this.props.author}>
+          <Link to={"/user/"+this.props.author}>
             <h1 className={"username"}>{this.props.username}</h1>
           </Link>
           <h2 className={"date"}>{dateString}</h2>
