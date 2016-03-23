@@ -1,0 +1,10 @@
+{
+  "presets": ["es2015", "react"],
+  "plugins": ["transform-runtime", "transform-es2015-arrow-functions"],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"],
+      "plugins": ["transform-react-display-name"]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+
+html {
+  background-color: #f4f4f4;
+  color: #001;
+}
+
+a {
+  color: #335;
+}
+
+blockquote {
+  margin-left: .5rem;
+  padding-left: .5rem;
+  margin-right: 1rem;
+  border-left: 1px solid #ccc;
+}
+
+.btn {
+  background-color: #fff !important;
+  border: none !important;
+  outline: none;
+}
+
+.btn:hover {
+  color: #0096ff !important;
+}
+
+#close:hover {
+  color: red !important;
+}
+
+#top-bar {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none
+}
+
+@media screen and (max-width:67em) {
+  #top-bar {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #dfdfdf;
+  }
+}
+
+#logo {
+  color: #002;
+}
+
+#feed #post {
+  max-width: 608px;
+  overflow: hidden;
+  font-size: 10px;
+  /*min-height: 195px;*/
+}
+
+#feed #post #post-body,
+#feed #post #tags  {
+  max-width: 20rem;
+}
+
+/*HUGE HACK, not sure how else to remove first margin in rendered markdown*/
+#post #post-body #text {
+  margin-top: -14px;
+}
+
+#darken {
+  pointer-events:none;
+  -webkit-transition: background .2s ease-out;
+  -moz-transition: background .2s ease-out;
+  -o-transition: background .2s ease-out;
+  transition: background .2s ease-out;
+  z-index: 200;
+}
+
+#darken.inactive {
+  pointer-events:none;
+  background-color: rgba(180, 180, 180, 0);
+}
+
+#darken.active {
+  pointer-events: all;
+  background-color: rgba(180, 180, 180, 0.95);
+}
+
+#composer.inactive {
+  opacity: 0;
+}
+
+#composer {
+  margin-top: -.5rem;
+  opacity: 1;
+  -webkit-transition: opacity .2s ease-out;
+  -moz-transition: opacity .2s ease-out;
+  -o-transition: opacity .2s ease-out;
+  transition: opacity .2s ease-out;
+}
+
+#new-post {
+  max-width: 21rem;
+}
+
+#editor {
+  box-shadow: 0px 0px 100px rgba(0,0,0,0.3);
+}
+
+#new-post #buttons {
+  position: relative;
+  max-width: 21rem;
+  z-index: 220;
+}
+
+#editor-container {
+  max-width: 20rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+#editor .public-DraftEditor-content {
+  min-height: 20rem;
+}
+
+#editor img {
+  margin-top: .2rem;
+  width: 100%;
+  cursor: default;
+}
+
+#audioplayer #artwork {
+  width: 20rem;
+  height: 20rem;
+}
+
+#new-indicator {
+  margin-top: -4px;
+}
+
+#new-post-icon {
+  cursor: pointer;
+  pointer-events: all;
+}
+
+#time-tag {
+  font-family: sans-serif !important;
+}
