@@ -65,7 +65,11 @@ module.exports = {
 		})
 	},
 
-
+	cat(hash, cb) {
+		ipfs.cat(hash, function(err, res) {
+			cb(err, res);
+		})
+	},
 
 	uploadAudio: function(audio, cb) {
 

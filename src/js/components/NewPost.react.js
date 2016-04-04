@@ -41,11 +41,13 @@ var NewPost = React.createClass({
         }
         else {
           var data = new Buffer(item.data);
+          // kinda hacky :(
           var t = this;
+          t.PostActionCreators = PostActionCreators;
           UploadUtils.add(data, function(err, res) {
             post.content.push({type: item.type, hash: res[0].Hash})
             if (added++ == content.length - 1) {
-              PostActionCreators.createPost(post);
+              t.PostActionCreators.createPost(post);
               t.close();
             }
           })
@@ -56,17 +58,17 @@ var NewPost = React.createClass({
         console.log("markdown not yet supported");
       }
 
-      else if (item.type == "image/jpeg" || item.type == "image/jpg" || item.type == "image/jpeg" || item.type == "image/png") {
-        // from ipfs-webui
+      else if (item.type == "image/jpeg" || item.type == "image/jpg" || item.type == "image/jpeg" || item.type == "image/png" || item.type == "image/gif") {
         const reader = new window.FileReader()
         reader.onload = () => {
           let data = reader.result
           data = new Buffer(data.substr(data.indexOf(',') + 1), 'base64')
           var t = this;
+          t.PostActionCreators = PostActionCreators;
           UploadUtils.add(data, function(err, res) {
             post.content.push({type: item.type, hash: res[0].Hash})
             if (added++ == content.length - 1) {
-              PostActionCreators.createPost(post);
+              t.PostActionCreators.createPost(post);
               t.close();
             }
           })
@@ -78,6 +80,7 @@ var NewPost = React.createClass({
   },
 
   close() {
+    // setTimeout(function() {this.close}, 1000);
     this.props.close();
   },
 

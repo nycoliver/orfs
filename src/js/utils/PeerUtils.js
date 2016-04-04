@@ -7,11 +7,12 @@ var PeerActionCreators = require('../actions/PeerActionCreators')
 var Stream = require('stream')
 
 module.exports = {
-  getPeerInfo(peerid, cb) {
+  getPeerInfo(peer, cb) {
+      console.log('???')
       // ipfs.cat('/ipns/'+peerid+'/orfs/profile.json', function(err, res) {
-      ipfs.cat('/ipns/' + peerid, function(err, res) {
+      ipfs.cat('/ipns/' + peer.id, function(err, res) {
         if (err || res.Code == 0) {
-          console.error("Error resolving name: ", peerid, err, res);
+          console.error("Error resolving name: ", peer.id, err, res);
           return;
         }
 
@@ -22,7 +23,7 @@ module.exports = {
           });
           res.on("end", function() {
             if (!json.profile) return
-            PeerActionCreators.foundPeer(peerid, data.profile);
+            PeerActionCreators.foundPeer(peer.id, data.profile);
           })
         } else { // Returned as a string
           console.log(res)
@@ -30,10 +31,10 @@ module.exports = {
       })
     },
 
-    getPostsOfPeer: function(peerid, cb) {
-      ipfs.cat('/ipns/' + peerid, function(err, res) {
+    getPostsOfPeer: function(peer, cb) {
+      ipfs.cat('/ipns/' + peer.id, function(err, res) {
         if (err) {
-          console.error("Error resolving name: ", err, res);
+          console.error("Error resolving name: ", peer.id, err, res);
           return;
         }
         if (res.readable) { // Returned as a stream
@@ -47,11 +48,12 @@ module.exports = {
             } catch (err) {
               console.log("Unable to parse json:", err)
             }
-            // if (!json.posts) return
 
-            var posts = json;//json.posts;
-            for (var i = posts.length - 1; i >= 0; i--) {
-              PostActionCreators.foundPost(posts[i]);
+            //check for null here
+            var profile = json;//json.posts;
+            for (var i = profile.posts.length - 1; i >= 0; i--) {
+            console.log("Found post", profile.posts[i])
+              PostActionCreators.foundPost(profile.posts[i]);
             };
           })
         } else {

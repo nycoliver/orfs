@@ -27,6 +27,7 @@ for (var p in _peers.following) {
 };
 
 function _checkForUpdatesRecursively(peerid) {
+  console.log("fetching posts of", peerid)
   PeerUtils.getPostsOfPeer(peerid, function(err, res) {
     setTimeout(function() {
       _checkForUpdatesRecursively(peer.id)

@@ -44,6 +44,7 @@ blockquote {
 
 #logo {
   color: #002;
+  pointer-events: all;
 }
 
 #feed #post {

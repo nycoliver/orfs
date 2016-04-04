@@ -32,7 +32,7 @@ var App = React.createClass({
       newPost: !this.state.newPost
     })
     this.refs.newPost.clear();
-    if (this.state.newPost)
+    if (!this.state.newPost)
       this.refs.newPost.focus();
   },
 

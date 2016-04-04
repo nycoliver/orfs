@@ -50,24 +50,25 @@ var Feed = React.createClass({
 
     var posts = this.state.posts;
 
-    var files = Object.keys(posts).map(function(file, index) {
-      file = posts[file];
+    var files = Object.keys(posts).map(function(p, index) {
 
-      console.log(file)
+      const postHash = posts[p];
+      const post = PostStore.get(postHash);
+      console.log(post)
 
       return (<Post
-        type={file.type}
-        author={file.author}
-        username={file.username}
-        avatar={file.avatar}
-        id={file.id}
-        date={file.date}
-        name={file.name}
-        artwork={file.artwork}
-        artist={file.artist}
-        title={file.title}
-        text={file.text}
-        content={file.content}
+        type={post.type}
+        author={post.author}
+        username={post.username}
+        avatar={post.avatar}
+        id={post.id}
+        date={post.date}
+        name={post.name}
+        artwork={post.artwork}
+        artist={post.artist}
+        title={post.title}
+        text={post.text}
+        content={post.content}
         key={index}
       />)
     });

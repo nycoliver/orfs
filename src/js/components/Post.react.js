@@ -11,8 +11,12 @@ var ProfileStore = require('../stores/ProfileStore')
 
 var Post = React.createClass({
   displayName: "Post",
+  propTypes: {
+    content: React.PropTypes.array.isRequired,
+  },
   render: function() {
-    console.log(this.props.content)
+    if (!this.props.content)
+      return null
     const post = this.props.content.map(function(content, index) {
       if (content.type == "audio/mp3")
         return <AudioPlayer
@@ -20,13 +24,14 @@ var Post = React.createClass({
           src={"http://localhost:8080/ipfs/" + content.hash}
           title={content.title}
           artist={content.artist}
-          preload='none'/>
+          preload='none'
+          key={index} />
 
-        else if (content.type == "image/jpg" || content.type == "image/jpeg" || content.type == "image/gif" || content.type == "image/png")
-        return <img className="w-100" src={'http://localhost:8080/ipfs/' + content.hash}></img>
+      else if (content.type == "image/jpg" || content.type == "image/jpeg" || content.type == "image/gif" || content.type == "image/png")
+        return <img className="w-100" src={'http://localhost:8080/ipfs/' + content.hash} key={index} ></img>
 
       else if (content.type == "text/plain")
-        return <div id="text" className="serif"><Markdown source={content.hash} /></div>
+        return <div id="text" className="serif"><Markdown source={content.hash} key={index} /></div>
     })
 
     var dateString = moment.unix(this.props.date).fromNow(); //format("ddd, hA");

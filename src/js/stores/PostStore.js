@@ -15,8 +15,7 @@ var conf = localStorage;
 var ActionTypes = Constants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
-// Obviously do this better
-
+// Obviously this is super messed up
 var _postInfo, _allPosts, _selfPosts;
 
 try {
@@ -49,12 +48,10 @@ function _createPost(post, cb) {
     "author": profile.id,
     "username": profile.username,
     "avatar": profile.avatar,
+    "date": Date.now() / 1000,
     "content": post.content,
-    "tags": post.tags,
-    "date": Date.now() / 1000
+    "tags": post.tags
   }
-
-  // Just make this UploadUtils.uploadPost
 
   // Metadata should already be done before here
   if (post.type == "audio/mp3" || post.type == "audio/mpeg") {
@@ -65,34 +62,84 @@ function _createPost(post, cb) {
     postToAdd.year = post.metadata.year;
   }
 
-  _selfPosts.unshift(postToAdd);
-  _postInfo[postToAdd.id] = postToAdd;
-  _allPosts.unshift(postToAdd);
-  _savePosts();
-
-  var toPublish = {
-    profile: profile, // Unsafe
-    posts: _selfPosts // Unsafe
+  try {
+    var postString = JSON.stringify(postToAdd);
+  }
+  catch (error) {
+    console.err('Invalid post json:', error)
   }
 
-  UploadUtils.publish(toPublish, function(err, res) {
-    if (!err)
-      cb(null, res)
-    else
-      cb(err)
+  const data = new Buffer(postString);
+  const t = this;
+  UploadUtils.add(data, function(err, res) {
+    if (err) {
+      console.err('failed to add post', err)
+      return
+    }
+    const postHash = res[0].Hash;
+
+    // save in localstorage
+    _selfPosts.unshift(postHash);
+    _postInfo[postHash] = postToAdd;
+    _allPosts.unshift(postHash);
+    // _savePosts();
+
+    // horrible and unsafe
+    const toPublish = {
+      profile: profile, // Unsafe
+      posts: _selfPosts // Unsafe
+    }
+
+    UploadUtils.publish(toPublish, function(err, res) {
+      if (!err)
+        cb(null, res)
+      else
+        cb(err)
+    })
   })
 }
 
-function _foundPost(post, cb) {
-  var profile = ProfileStore.getProfile();
-  if (!_postInfo[post.id]) {
-    _postInfo[post.id] = post;
-    _allPosts.unshift(post)
-    if (post.author == profile.id)
-      _selfPosts.unshift(post)
-    _savePosts();
-  }
-  cb()
+function _foundPost(postHash, cb) {
+  console.log('found', postHash)
+
+  UploadUtils.cat(postHash, function(err, res) {
+    if(err || !res) return console.error(err)
+
+    if(res.readable) {
+        // Returned as a stream
+        // res.pipe(process.stdout)
+        var json = '';
+        res.on("data", function(data) {
+          json += data
+        });
+        res.on("end", function() {
+          console.log('json', json)
+          if (!_postInfo[postHash]) {
+            var post;
+            try { post = JSON.parse(json); }
+            catch (error) { return console.error(err) }
+            console.log('adding post', post)
+            _postInfo[postHash] = post;
+            _allPosts.unshift(postHash)
+            if (post.author == ProfileStore.getProfile().id)
+              _selfPosts.unshift(postHash)
+            // _savePosts();
+          }
+          cb()
+        })
+    } else {
+        // Returned as a string
+        console.log('string', res)
+        if (!_postInfo[postHash]) {
+          _postInfo[postHash] = post;
+          _allPosts.unshift(postHash)
+          if (post.author == ProfileStore.getProfile().id)
+            _selfPosts.unshift(postHash)
+          // _savePosts();
+        }
+        cb()
+    }
+  })
 }
 
 var PostStore = assign({}, EventEmitter.prototype, {
@@ -117,10 +164,14 @@ var PostStore = assign({}, EventEmitter.prototype, {
     return _allPosts;
   },
 
-  get: function(id) {
-    return _allPosts[id];
-  }
+  get: function(hash) {
+    console.log(_postInfo)
+    return _postInfo[hash];
+  },
 
+  delete(hash) {
+
+  }
 })
 
 PostStore.dispatchToken = AppDispatcher.register(function(action) {
