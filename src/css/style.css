@@ -140,6 +140,22 @@ blockquote {
   pointer-events: all;
 }
 
+#searchBar {
+  pointer-events: all;
+  width: 24em;
+}
+
+#showUserMenu {
+  pointer-events: all;
+}
+
+#userDropdown {
+  width: 12em;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  border-color: #bbb;
+  /*margin-right: 1.5rem;*/
+}
+
 #time-tag {
   font-family: sans-serif !important;
 }
